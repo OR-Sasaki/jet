@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float moterForce = 1000f;
     [SerializeField] private float moterTargetVelocity = 1000f;
     [SerializeField] private Rigidbody jetRigidbody;
+    [SerializeField] private GameObject jetEffect;
 
     void Update()
     {
@@ -28,7 +29,12 @@ public class Player : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Space))
         {
+            jetEffect.SetActive(true);
             jetRigidbody.AddForce(jetRigidbody.transform.up * jetForce, ForceMode.Force);
+        }
+        else
+        {
+            jetEffect.SetActive(false);
         }
     }
 
