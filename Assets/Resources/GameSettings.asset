@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: GameSettings
   m_EditorClassIdentifier: 
   JetForce: 5
-  MotorForce: 1000
-  MoterTargetVelocity: 1000
+  MotorForce: 2000
+  MoterTargetVelocity: 2000
   MaxJetFuel: 100
   ConsumeJetFuel: 30
-  JetFuelRecoveryTime: 2
+  JetFuelRecoveryTime: 1
   JetFuelRecoverySpeed: 30
