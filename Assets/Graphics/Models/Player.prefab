@@ -1157,8 +1157,9 @@ GameObject:
   - component: {fileID: 4321775285385259556}
   - component: {fileID: 2292733203531315666}
   - component: {fileID: 3966129835796733579}
+  - component: {fileID: 2130127960586749929}
   m_Layer: 0
-  m_Name: mixamorig:Hips
+  m_Name: PlayerBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1173,7 +1174,7 @@ Transform:
   m_GameObject: {fileID: 4748012324251105443}
   serializedVersion: 2
   m_LocalRotation: {x: 0.0000100859315, y: -0.000014705454, z: 0.00043386858, w: 0.99999994}
-  m_LocalPosition: {x: 0, y: 0.3, z: -5}
+  m_LocalPosition: {x: 0, y: 0.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1229,6 +1230,27 @@ CapsuleCollider:
   m_Height: 27.016052
   m_Direction: 1
   m_Center: {x: -1.4609233, y: -10.211162, z: -2.6568706}
+--- !u!114 &2130127960586749929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4748012324251105443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fe66c917e5914f6bb2425d96d7792e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hingeJointA: {fileID: 6526036977100151870}
+  hingeJointB: {fileID: 4177049258054998342}
+  jetRigidbody: {fileID: 9009950824789348043}
+  jetEffect: {fileID: 7010867728391287400}
+  bodies:
+  - {fileID: 6729880240577169422}
+  - {fileID: 8758768023197223411}
+  maxJetFuel: 100
+  remainJetFuel: 100
 --- !u!1 &4859677609866243630
 GameObject:
   m_ObjectHideFlags: 0
@@ -1589,7 +1611,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7243600865597654049}
-  - component: {fileID: 5697700463006158024}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1614,27 +1635,6 @@ Transform:
   - {fileID: 9166575845132294111}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!114 &5697700463006158024
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5933038112003536529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1fe66c917e5914f6bb2425d96d7792e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  jetForce: 50
-  hingeJointA: {fileID: 6526036977100151870}
-  hingeJointB: {fileID: 4177049258054998342}
-  moterForce: 1000
-  moterTargetVelocity: 1000
-  jetRigidbody: {fileID: 9009950824789348043}
-  jetEffect: {fileID: 7010867728391287400}
-  maxJetFuel: 100
-  remainJetFuel: 100
 --- !u!1 &6106871684200116846
 GameObject:
   m_ObjectHideFlags: 0
@@ -1913,7 +1913,7 @@ Transform:
   m_GameObject: {fileID: 6729880240577169422}
   serializedVersion: 2
   m_LocalRotation: {x: 0.0000100811285, y: -0.000014705436, z: 0.00043386844, w: 0.9999999}
-  m_LocalPosition: {x: 0, y: 0.30000174, z: -5}
+  m_LocalPosition: {x: 0, y: 0.30000174, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7510,7 +7510,7 @@ Transform:
   m_GameObject: {fileID: 8758768023197223411}
   serializedVersion: 2
   m_LocalRotation: {x: -0.016309878, y: 2.983143e-10, z: 4.504987e-11, w: 0.999867}
-  m_LocalPosition: {x: 0, y: 13.699997, z: -5.400004}
+  m_LocalPosition: {x: 0, y: 13.699997, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

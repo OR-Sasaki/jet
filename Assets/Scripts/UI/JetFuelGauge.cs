@@ -7,7 +7,7 @@ public class JetFuelGauge : MonoBehaviour
     [SerializeField] TMP_Text jetFuelText;
     [SerializeField] Image jetFuelGaugeImage;
 
-    private Player player;
+    Player player;
 
     void Start()
     {
@@ -19,7 +19,7 @@ public class JetFuelGauge : MonoBehaviour
         Set(player.maxJetFuel, player.remainJetFuel);
     }
 
-    public void Set(float maxJetFuel, float remainJetFuel)
+    void Set(float maxJetFuel, float remainJetFuel)
     {
         jetFuelText.text = $"{remainJetFuel:F1}";
         jetFuelGaugeImage.fillAmount = remainJetFuel / maxJetFuel;
