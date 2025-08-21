@@ -20,6 +20,7 @@ public class Player : MonoBehaviour
     private float remainJetFuelRecoveryTime = 0f;
     private float jetFuelRecoverySpeed = 3f;
     private float checkPointDistance = 3f;
+    private float forceAreaForce = 10f;
 
     // 各種データ
     private int _reachedCheckPointIndex = 0;
@@ -33,6 +34,7 @@ public class Player : MonoBehaviour
         moterTargetVelocity = GameSettings.I.MoterTargetVelocity;
         jetFuelRecoveryTime = GameSettings.I.JetFuelRecoveryTime;
         jetFuelRecoverySpeed = GameSettings.I.JetFuelRecoverySpeed;
+        forceAreaForce = GameSettings.I.ForceAreaForce;
     }
 
     void Start()
@@ -193,5 +195,20 @@ public class Player : MonoBehaviour
         // ジェット燃料をリセット
         remainJetFuel = maxJetFuel;
         remainJetFuelRecoveryTime = jetFuelRecoveryTime;
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        Debug.Log("OnTriggerStay: " + other.gameObject.name);
+        
+        // ForceAreaとの相互作用
+        if (other.gameObject.TryGetComponent<ForceArea>(out var forceArea))
+        {
+            // ForceAreaの前方方向に力を加える
+            Vector3 forceDirection = forceArea.transform.forward;
+            
+            // jetRigidbodyに力を加える
+            jetRigidbody.AddForce(forceDirection * forceAreaForce, ForceMode.Force);
+        }
     }
 }

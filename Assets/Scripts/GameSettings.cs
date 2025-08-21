@@ -30,4 +30,7 @@ public class GameSettings : ScriptableObject
 
     [Header("ジェット燃料の回復速度")]
     public float JetFuelRecoverySpeed = 3f;
+
+    [Header("ForceAreaの力の強さ")]
+    public float ForceAreaForce = 10f;
 }

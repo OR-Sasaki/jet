@@ -19,3 +19,4 @@ MonoBehaviour:
   ConsumeJetFuel: 30
   JetFuelRecoveryTime: 1
   JetFuelRecoverySpeed: 30
+  ForceAreaForce: 30
