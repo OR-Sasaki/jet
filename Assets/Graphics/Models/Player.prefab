@@ -1897,6 +1897,7 @@ GameObject:
   - component: {fileID: 9009950824789348043}
   - component: {fileID: 6526036977100151870}
   - component: {fileID: 6425447439197050398}
+  - component: {fileID: 4827271216568666136}
   m_Layer: 0
   m_Name: Legs
   m_TagString: Untagged
@@ -2011,6 +2012,18 @@ CapsuleCollider:
   m_Height: 99.46164
   m_Direction: 1
   m_Center: {x: -0.48881248, y: -76.39821, z: -2.4813626}
+--- !u!114 &4827271216568666136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6729880240577169422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c11220a5a62446eb6a9cefd798f85dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6756716883506091864
 GameObject:
   m_ObjectHideFlags: 0
@@ -7494,6 +7507,7 @@ GameObject:
   - component: {fileID: 7106997007523876137}
   - component: {fileID: 4177049258054998342}
   - component: {fileID: 4757987666337579893}
+  - component: {fileID: 1132437982241487729}
   m_Layer: 0
   m_Name: mixamorig:Spine
   m_TagString: Untagged
@@ -7606,6 +7620,18 @@ CapsuleCollider:
   m_Height: 61.788673
   m_Direction: 1
   m_Center: {x: -6.088764e-16, y: 24.210094, z: -2.4382334}
+--- !u!114 &1132437982241487729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8758768023197223411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c11220a5a62446eb6a9cefd798f85dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8767809112624684210
 GameObject:
   m_ObjectHideFlags: 0

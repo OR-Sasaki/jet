@@ -91,42 +91,52 @@ public class Player : MonoBehaviour
         // チェックポイント間の移動
         if(Input.GetKeyDown(KeyCode.Q))
         {
-            var checkPoints = GameManager.I.checkPoints.Reverse();
-            var pos = this.transform.position;
-            foreach (var t in checkPoints)
-            {
-                // チェックポイントの位置が現在の位置よりも奥にある場合はスキップ
-                if (pos.z <= t.transform.position.z) continue;
-
-                // チェックポイントが現在位置とかなり近い場合はスキップ
-                if (Vector3.Distance(t.transform.position, this.transform.position) < checkPointDistance) continue;
-
-                pos.y = t.transform.position.y;
-                pos.z = t.transform.position.z;
-                SetPosition(pos);
-                break;
-            }
+            MovePreviousCheckPoint();
         }
         else if(Input.GetKeyDown(KeyCode.E))
         {
-            var checkPoints = GameManager.I.checkPoints;
-            var pos = this.transform.position;
-            foreach (var t in checkPoints)
-            {
-                // 到達済みのチェックポイントより先にはいけない
-                if (t.Index > _reachedCheckPointIndex) continue;
+            MoveNextCheckPoint();
+        }
+    }
 
-                // チェックポイントの位置が現在の位置より手前にある場合はスキップ
-                if (t.transform.position.z <= this.transform.position.z) continue;
+    void MovePreviousCheckPoint()
+    {
+        var checkPoints = GameManager.I.checkPoints.Reverse();
+        var pos = this.transform.position;
+        foreach (var t in checkPoints)
+        {
+            // チェックポイントの位置が現在の位置よりも奥にある場合はスキップ
+            if (pos.z <= t.transform.position.z) continue;
 
-                // チェックポイントが現在位置とかなり近い場合はスキップ
-                if (Vector3.Distance(t.transform.position, this.transform.position) < checkPointDistance) continue;
+            // チェックポイントが現在位置とかなり近い場合はスキップ
+            if (Vector3.Distance(t.transform.position, this.transform.position) < checkPointDistance) continue;
 
-                pos.y = this.transform.position.y;
-                pos.z = t.transform.position.z;
-                SetPosition(pos);
-                break;
-            }
+            pos.y = t.transform.position.y;
+            pos.z = t.transform.position.z;
+            SetPosition(pos);
+            break;
+        }
+    }
+
+    void MoveNextCheckPoint()
+    {
+        var checkPoints = GameManager.I.checkPoints;
+        var pos = this.transform.position;
+        foreach (var t in checkPoints)
+        {
+            // 到達済みのチェックポイントより先にはいけない
+            if (t.Index > _reachedCheckPointIndex) continue;
+
+            // チェックポイントの位置が現在の位置より手前にある場合はスキップ
+            if (t.transform.position.z <= this.transform.position.z) continue;
+
+            // チェックポイントが現在位置とかなり近い場合はスキップ
+            if (Vector3.Distance(t.transform.position, this.transform.position) < checkPointDistance) continue;
+
+            pos.y = this.transform.position.y;
+            pos.z = t.transform.position.z;
+            SetPosition(pos);
+            break;
         }
     }
 
@@ -158,14 +168,30 @@ public class Player : MonoBehaviour
     }
 
     // チェックポイントに到達したときの処理
-    private void OnTriggerEnter(Collider collision)
+    public void OnTriggerEnter(Collider collision)
     {
-        if (!collision.gameObject.TryGetComponent<CheckPoint>(out var checkPoint))
-            return;
+        OnTriggerCheckpoint(collision);
+        OnTriggerDeadArea(collision);
+    }
 
+    private void OnTriggerCheckpoint(Collider other)
+    {
+        if (!other.gameObject.TryGetComponent<CheckPoint>(out var checkPoint)) return;
         if (checkPoint.Index <= _reachedCheckPointIndex) return;
 
         _reachedCheckPointIndex = checkPoint.Index;
         checkPoint.SetActive(true);
+    }
+
+    private void OnTriggerDeadArea(Collider other)
+    {
+        if (!other.gameObject.TryGetComponent<DeadArea>(out var deadArea)) return;
+
+        // 体の位置をリセット
+        MovePreviousCheckPoint();
+
+        // ジェット燃料をリセット
+        remainJetFuel = maxJetFuel;
+        remainJetFuelRecoveryTime = jetFuelRecoveryTime;
     }
 }

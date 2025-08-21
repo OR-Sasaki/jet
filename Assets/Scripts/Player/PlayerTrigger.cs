@@ -6,6 +6,11 @@ public class PlayerTrigger : MonoBehaviour
 
     void Awake()
     {
-        player = this.gameObject.GetComponentInParent<Player>();
+        player = FindObjectsByType<Player>(FindObjectsSortMode.None)[0];
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        player.OnTriggerEnter(other);
     }
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,6 +23,10 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        // CheckPointの初期化処理(z座標準にindexを振る)
+        checkPoints = FindObjectsByType<CheckPoint>(FindObjectsSortMode.None);
+        checkPoints = checkPoints.OrderBy(cp => cp.transform.position.z).ToArray();
+
         for(var i = 0; i < checkPoints.Length; i++)
         {
             checkPoints[i].SetActive(false);
