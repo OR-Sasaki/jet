@@ -10,32 +10,12 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject[] bodies;
 
     // 挙動の設定
-    private float jetForce = 5f;
-    private float moterForce = 1000f;
-    private float moterTargetVelocity = 1000f;
-    public float maxJetFuel = 100f;
     public float remainJetFuel = 100f;
-    private float consumeJetFuel = 100f;
-    private float jetFuelRecoveryTime = 5f;
     private float remainJetFuelRecoveryTime = 0f;
-    private float jetFuelRecoverySpeed = 3f;
     private float checkPointDistance = 3f;
-    private float forceAreaForce = 10f;
 
     // 各種データ
     private int _reachedCheckPointIndex = 0;
-
-    void ApplySettings()
-    {
-        maxJetFuel = GameSettings.I.MaxJetFuel;
-        consumeJetFuel = GameSettings.I.ConsumeJetFuel;
-        jetForce = GameSettings.I.JetForce;
-        moterForce = GameSettings.I.MotorForce;
-        moterTargetVelocity = GameSettings.I.MoterTargetVelocity;
-        jetFuelRecoveryTime = GameSettings.I.JetFuelRecoveryTime;
-        jetFuelRecoverySpeed = GameSettings.I.JetFuelRecoverySpeed;
-        forceAreaForce = GameSettings.I.ForceAreaForce;
-    }
 
     void Start()
     {
@@ -48,8 +28,6 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        ApplySettings();
-
         // 体の曲げ
         if (Input.GetKey(KeyCode.A))
         {
@@ -68,9 +46,9 @@ public class Player : MonoBehaviour
         // ジェット
         if (Input.GetKey(KeyCode.Space) && remainJetFuel > 0)
         {
-            remainJetFuel = Mathf.Max(remainJetFuel - consumeJetFuel * Time.deltaTime, 0);
+            remainJetFuel = Mathf.Max(remainJetFuel - GameSettings.I.ConsumeJetFuel * Time.deltaTime, 0);
             jetEffect.SetActive(true);
-            jetRigidbody.AddForce(jetRigidbody.transform.up * jetForce, ForceMode.Force);
+            jetRigidbody.AddForce(jetRigidbody.transform.up * GameSettings.I.JetForce, ForceMode.Force);
         }
         else
         {
@@ -80,14 +58,14 @@ public class Player : MonoBehaviour
         // ジェット燃料の回復
         if (Input.anyKey)
         {
-            remainJetFuelRecoveryTime = jetFuelRecoveryTime;
+            remainJetFuelRecoveryTime = GameSettings.I.JetFuelRecoveryTime;
         }
         else
         {
             remainJetFuelRecoveryTime -= Time.deltaTime;
 
             if (remainJetFuelRecoveryTime <= 0)
-                remainJetFuel = Mathf.Min(remainJetFuel + jetFuelRecoverySpeed * Time.deltaTime, maxJetFuel);
+                remainJetFuel = Mathf.Min(remainJetFuel + GameSettings.I.JetFuelRecoverySpeed * Time.deltaTime, GameSettings.I.MaxJetFuel);
         }
 
         // チェックポイント間の移動
@@ -158,14 +136,14 @@ public class Player : MonoBehaviour
     {
         hingeJointA.useMotor = true;
         var motor = hingeJointA.motor;
-        motor.force = moterForce;
-        motor.targetVelocity = (direction ? 1 : -1) * moterTargetVelocity;
+        motor.force = GameSettings.I.MotorForce;
+        motor.targetVelocity = (direction ? 1 : -1) * GameSettings.I.MoterTargetVelocity;
         hingeJointA.motor = motor;
 
         hingeJointB.useMotor = true;
         var motorB = hingeJointB.motor;
-        motorB.force = moterForce;
-        motorB.targetVelocity = (direction ? -1 : 1) * moterTargetVelocity;
+        motorB.force = GameSettings.I.MotorForce;
+        motorB.targetVelocity = (direction ? -1 : 1) * GameSettings.I.MoterTargetVelocity;
         hingeJointB.motor = motorB;
     }
 
@@ -193,22 +171,20 @@ public class Player : MonoBehaviour
         MovePreviousCheckPoint();
 
         // ジェット燃料をリセット
-        remainJetFuel = maxJetFuel;
-        remainJetFuelRecoveryTime = jetFuelRecoveryTime;
+        remainJetFuel = GameSettings.I.MaxJetFuel;
+        remainJetFuelRecoveryTime = GameSettings.I.JetFuelRecoveryTime;
     }
 
     private void OnTriggerStay(Collider other)
     {
-        Debug.Log("OnTriggerStay: " + other.gameObject.name);
-        
         // ForceAreaとの相互作用
         if (other.gameObject.TryGetComponent<ForceArea>(out var forceArea))
         {
             // ForceAreaの前方方向に力を加える
             Vector3 forceDirection = forceArea.transform.forward;
-            
+
             // jetRigidbodyに力を加える
-            jetRigidbody.AddForce(forceDirection * forceAreaForce, ForceMode.Force);
+            jetRigidbody.AddForce(forceDirection * GameSettings.I.ForceAreaForce, ForceMode.Force);
         }
     }
 }

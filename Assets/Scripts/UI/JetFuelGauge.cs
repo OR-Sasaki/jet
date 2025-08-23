@@ -16,7 +16,7 @@ public class JetFuelGauge : MonoBehaviour
 
     void Update()
     {
-        Set(player.maxJetFuel, player.remainJetFuel);
+        Set(GameSettings.I.MaxJetFuel, player.remainJetFuel);
     }
 
     void Set(float maxJetFuel, float remainJetFuel)
