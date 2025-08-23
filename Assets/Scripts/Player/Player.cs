@@ -152,6 +152,7 @@ public class Player : MonoBehaviour
     {
         OnTriggerCheckpoint(collision);
         OnTriggerDeadArea(collision);
+        OnTriggerPushArea(collision);
     }
 
     private void OnTriggerCheckpoint(Collider other)
@@ -185,6 +186,24 @@ public class Player : MonoBehaviour
 
             // jetRigidbodyに力を加える
             jetRigidbody.AddForce(forceDirection * GameSettings.I.ForceAreaForce, ForceMode.Force);
+        }
+    }
+
+    private void OnTriggerPushArea(Collider other)
+    {
+        if (!other.gameObject.TryGetComponent<PushArea>(out var pushArea)) return;
+
+        // PushAreaの前方方向の速度を計算
+        Vector3 pushDirection = pushArea.transform.forward;
+        Vector3 pushVelocity = pushDirection * pushArea.Velocity;
+
+        // Playerの速度を設定
+        GetComponent<Rigidbody>().linearVelocity = pushVelocity;
+
+        // bodiesの全てのRigidbodyの速度を設定
+        foreach (var body in bodies)
+        {
+            body.GetComponent<Rigidbody>().linearVelocity = pushVelocity;
         }
     }
 }
