@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a83472d47909b41839f3cfe138e751d5, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: 
-  JetForce: 2
+  JetForce: 3
   MotorForce: 2000
   MoterTargetVelocity: 2000
   MaxJetFuel: 70
