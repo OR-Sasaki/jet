@@ -6,6 +6,7 @@ public class JetFuelGauge : MonoBehaviour
 {
     [SerializeField] TMP_Text jetFuelText;
     [SerializeField] Image jetFuelGaugeImage;
+    [SerializeField] Image BombImage;
 
     Player player;
 
@@ -16,12 +17,18 @@ public class JetFuelGauge : MonoBehaviour
 
     void Update()
     {
-        Set(GameSettings.I.MaxJetFuel, player.remainJetFuel);
+        SetFuel(GameSettings.I.MaxJetFuel, player.remainJetFuel);
+        SetBomb(player.canBomb);
     }
 
-    void Set(float maxJetFuel, float remainJetFuel)
+    void SetFuel(float maxJetFuel, float remainJetFuel)
     {
         jetFuelText.text = $"{remainJetFuel:F1}";
         jetFuelGaugeImage.fillAmount = remainJetFuel / maxJetFuel;
+    }
+
+    void SetBomb(bool canBomb)
+    {
+        BombImage.enabled = canBomb;
     }
 }

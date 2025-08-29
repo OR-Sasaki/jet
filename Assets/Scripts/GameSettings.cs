@@ -15,6 +15,9 @@ public class GameSettings : ScriptableObject
     [Header("ジェットの力")]
     public float JetForce = 50f;
 
+    [Header("ボムの力")]
+    public float BombForce = 10f;
+
     [Header("プレイヤーの曲がる力")]
     public float MotorForce = 1000f;
     public float MoterTargetVelocity = 1000f;

@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
 
     // 挙動の設定
     public float remainJetFuel = 100f;
+    public bool canBomb = true;
     private float remainJetFuelRecoveryTime = 0f;
     private float checkPointDistance = 3f;
 
@@ -24,6 +25,9 @@ public class Player : MonoBehaviour
             .Where(t => t.Index <= _reachedCheckPointIndex)
             .ToList()
             .ForEach(t => t.SetActive(true));
+
+        remainJetFuel = GameSettings.I.MaxJetFuel;
+        canBomb = true;
     }
 
     void Update()
@@ -32,10 +36,12 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.A))
         {
             SetHingeMoter(true);
+            ExecBomb();
         }
         else if (Input.GetKey(KeyCode.D))
         {
             SetHingeMoter(false);
+            ExecBomb();
         }
         else
         {
@@ -64,8 +70,15 @@ public class Player : MonoBehaviour
         {
             remainJetFuelRecoveryTime -= Time.deltaTime;
 
-            if (remainJetFuelRecoveryTime <= 0)
-                remainJetFuel = Mathf.Min(remainJetFuel + GameSettings.I.JetFuelRecoverySpeed * Time.deltaTime, GameSettings.I.MaxJetFuel);
+            if (remainJetFuelRecoveryTime <= 0 && remainJetFuel < GameSettings.I.MaxJetFuel)
+            {
+                remainJetFuel += GameSettings.I.JetFuelRecoverySpeed * Time.deltaTime;
+                if (remainJetFuel > GameSettings.I.MaxJetFuel)
+                {
+                    remainJetFuel = GameSettings.I.MaxJetFuel;
+                    canBomb = true;
+                }
+            }
         }
 
         // チェックポイント間の移動
@@ -145,6 +158,20 @@ public class Player : MonoBehaviour
         motorB.force = GameSettings.I.MotorForce;
         motorB.targetVelocity = (direction ? -1 : 1) * GameSettings.I.MoterTargetVelocity;
         hingeJointB.motor = motorB;
+    }
+
+    void ExecBomb()
+    {
+        if (!canBomb) return;
+
+        // bodies全部に同じ力をかける
+        foreach (var body in bodies)
+        {
+            var rb = body.GetComponent<Rigidbody>();
+            rb.AddForce(Vector3.up * GameSettings.I.BombForce, ForceMode.Impulse);
+        }
+        jetRigidbody.AddForce(Vector3.up * GameSettings.I.BombForce, ForceMode.Impulse);
+        canBomb = false;
     }
 
     // チェックポイントに到達したときの処理
