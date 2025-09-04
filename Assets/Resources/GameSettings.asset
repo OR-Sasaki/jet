@@ -16,8 +16,8 @@ MonoBehaviour:
   BombForce: 1.5
   MotorForce: 2000
   MoterTargetVelocity: 2000
-  MaxJetFuel: 65
-  ConsumeJetFuel: 30
+  MaxJetFuel: 50
+  ConsumeJetFuel: 50
   JetFuelRecoveryTime: 1
   JetFuelRecoverySpeed: 100
   ForceAreaForce: 30
