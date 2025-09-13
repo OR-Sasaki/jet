@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a83472d47909b41839f3cfe138e751d5, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: 
-  JetForce: 2.5
+  JetForce: 1.5
   BombForce: 1.5
   MotorForce: 2000
   MoterTargetVelocity: 2000
-  MaxJetFuel: 50
+  MaxJetFuel: 100
   ConsumeJetFuel: 50
   JetFuelRecoveryTime: 1
   JetFuelRecoverySpeed: 100
