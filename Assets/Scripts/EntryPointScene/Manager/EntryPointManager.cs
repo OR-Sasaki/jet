@@ -4,7 +4,7 @@ namespace EntryPointScene.Manager
 {
     public class EntryPointManager
     {
-        SceneLoader _sceneLoader;
+        readonly SceneLoader _sceneLoader;
 
         public EntryPointManager(SceneLoader sceneLoader)
         {
