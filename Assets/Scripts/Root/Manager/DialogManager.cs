@@ -22,9 +22,8 @@ namespace Root.Manager
         /// <summary>
         /// ダイアログのファクトリーを登録
         /// </summary>
-        public void RegisterDialogFactory<T>(Func<T> factory) where T : Dialog
+        public void RegisterDialogFactory<T>(Type type, Func<T> factory) where T : Dialog
         {
-            var type = typeof(T);
             if (_factories.ContainsKey(type))
             {
                 _logger.LogWarning($"Dialog factory for {type.Name} is already registered. Overwriting.");

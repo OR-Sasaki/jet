@@ -39,8 +39,10 @@ namespace Root.View
                     continue;
                 }
 
+                var dialogType = dialogPrefab.GetType();
+
                 // ファクトリー関数を登録
-                _dialogManager.RegisterDialogFactory(() =>
+                _dialogManager.RegisterDialogFactory(dialogType, () =>
                 {
                     var instance = Instantiate(dialogPrefab, transform);
                     _resolver.Inject(instance);
@@ -48,7 +50,6 @@ namespace Root.View
                 });
 
                 // 登録した型を記録
-                var dialogType = dialogPrefab.GetType();
                 _registeredDialogTypes.Add(dialogType);
             }
         }
