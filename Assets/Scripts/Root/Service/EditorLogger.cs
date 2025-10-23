@@ -8,5 +8,15 @@ namespace Root.Service
         {
             Debug.Log(content);
         }
+
+        public void LogWarning(string content)
+        {
+            Debug.LogWarning(content);
+        }
+
+        public void LogError(string content)
+        {
+            Debug.LogError(content);
+        }
     }
 }

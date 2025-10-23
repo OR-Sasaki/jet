@@ -1,4 +1,6 @@
+using Root.Manager;
 using Root.Service;
+using Root.State;
 using VContainer;
 using VContainer.Unity;
 
@@ -10,6 +12,11 @@ namespace Root.Scope
         {
             builder.Register<SceneLoader>(Lifetime.Singleton);
             builder.Register<ILogger, EditorLogger>(Lifetime.Singleton);
+
+            // Dialog System
+            builder.Register<DialogState>(Lifetime.Singleton);
+            builder.Register<DialogManager>(Lifetime.Singleton);
+            builder.Register<DialogService>(Lifetime.Singleton);
         }
     }
 }

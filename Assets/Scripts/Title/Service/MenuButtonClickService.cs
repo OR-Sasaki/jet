@@ -1,5 +1,8 @@
 using System;
+using Root.Manager;
 using Root.Service;
+using Title.View;
+using UnityEngine;
 
 namespace Title.Service
 {
@@ -14,10 +17,12 @@ namespace Title.Service
         }
 
         readonly SceneLoader _sceneLoader;
+        readonly DialogManager _dialogManager;
 
-        public MenuButtonClickService(SceneLoader sceneLoader)
+        public MenuButtonClickService(SceneLoader sceneLoader, DialogManager dialogManager)
         {
             _sceneLoader = sceneLoader;
+            _dialogManager = dialogManager;
         }
 
         public void Click(MenuButtonType menuButtonType)
@@ -30,8 +35,10 @@ namespace Title.Service
                 case MenuButtonType.Multiplayer:
                     break;
                 case MenuButtonType.Settings:
+                    _dialogManager.OpenDialog<SettingsDialog>();
                     break;
                 case MenuButtonType.Credits:
+                    _dialogManager.OpenDialog<CreditsDialog>();
                     break;
             }
         }
