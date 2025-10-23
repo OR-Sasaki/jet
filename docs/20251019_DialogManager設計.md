@@ -44,6 +44,10 @@ Root/
     ├── Dialog.cs                 # ダイアログの基底クラス
     └── SceneDialogRegistry.cs    # シーンごとのダイアログ登録用コンポーネント
 
+Root/
+└── View/
+    └── ConfirmDialog.cs          # 確認ダイアログ（汎用）
+
 Title/
 └── View/
     ├── CreditsDialog.cs          # クレジットダイアログ
@@ -379,15 +383,18 @@ namespace Root.View
    - **SettingsDialog** - 設定ダイアログ（音量調整機能付き）
    - **MenuButtonClickService** - DialogManagerと連携してダイアログを開く
 
-### Phase 3: 機能拡張
-6. **DialogService の実装**
-   - 表示/非表示アニメーション
-   - オーバーレイ管理
+### Phase 3: 機能拡張 ✅ **完了**
+6. **具体的なダイアログの実装** ✅
+   - CreditsDialog - クレジット表示ダイアログ
+   - SettingsDialog - 設定ダイアログ（音量調整、リセット機能付き）
+   - **ConfirmDialog** - 確認ダイアログ（親子関係のテスト用）
+     - SetMessage()とSetTitle()で内容をカスタマイズ
+     - OnConfirmed/OnCancelledイベントでコールバック
+     - SettingsDialogからリセット確認として使用
 
-7. **具体的なダイアログの実装**
-   - CreditsDialog
-   - SettingsDialog
-   - ConfirmDialog（親子関係のテスト用）
+7. **DialogService の実装**
+   - 現在は基本構造のみ（将来の拡張用に確保）
+   - アニメーション機能は各Dialogで実装可能
 
 ### Phase 4: 統合とテスト
 8. **Titleシーンでの統合**
@@ -434,7 +441,7 @@ public class MenuButtonClickService
 }
 ```
 
-### 例2: ダイアログ内から子ダイアログを開く
+### 例2: ダイアログ内から子ダイアログを開く ✅ **実装済み**
 
 ```csharp
 // SettingsDialog.cs
@@ -445,30 +452,61 @@ public class SettingsDialog : Dialog
     protected override void Awake()
     {
         base.Awake();
-        _resetButton.onClick.AddListener(OnResetButtonClick);
+        
+        if (_resetButton != null)
+        {
+            _resetButton.onClick.AddListener(OnResetButtonClick);
+        }
     }
     
     private void OnResetButtonClick()
     {
         // 確認ダイアログを子として開く
         var confirmDialog = _dialogManager.OpenDialog<ConfirmDialog>(parent: this);
-        confirmDialog.SetMessage("設定をリセットしますか？");
-        confirmDialog.OnConfirmed += ResetSettings;
+        if (confirmDialog != null)
+        {
+            confirmDialog.SetTitle("Reset Settings");
+            confirmDialog.SetMessage("Are you sure you want to reset all settings to default?");
+            confirmDialog.OnConfirmed += ResetSettings;
+        }
+    }
+    
+    private void ResetSettings()
+    {
+        // デフォルト値にリセット
+        if (_volumeSlider != null)
+        {
+            _volumeSlider.value = 1.0f;
+        }
     }
 }
 ```
 
-### 例3: SceneDialogRegistryの配置
+**親子ダイアログの動作:**
+1. SettingsDialogが開いている状態でResetボタンをクリック
+2. ConfirmDialogが子として開く（SettingsDialogは非表示になる）
+3. ConfirmDialogで「Confirm」をクリックすると設定がリセットされる
+4. ConfirmDialogが閉じると親のSettingsDialogが再表示される
+
+### 例3: SceneDialogRegistryの配置（Unity エディタでの作業）
 
 ```
 Titleシーン
 ├── Canvas
 │   ├── TitleUI
+│   │   └── MenuButtons
 │   └── DialogContainer (SceneDialogRegistry)
-│       ├── CreditsDialogPrefab (Inspector で設定)
-│       ├── SettingsDialogPrefab (Inspector で設定)
-│       └── ConfirmDialogPrefab (Inspector で設定)
+│       ├── CreditsDialogPrefab (Inspector で設定) ✅
+│       ├── SettingsDialogPrefab (Inspector で設定) ✅
+│       └── ConfirmDialogPrefab (Inspector で設定) ✅
 ```
+
+**設定手順:**
+1. Titleシーンを開く
+2. Canvas下に空のGameObject「DialogContainer」を作成
+3. DialogContainerにSceneDialogRegistryコンポーネントをアタッチ
+4. 各ダイアログのプレハブを作成（UI要素を配置）
+5. SceneDialogRegistryのDialog Prefabsリストに3つのプレハブを登録
 
 ## 注意点と考慮事項
 
@@ -549,10 +587,29 @@ Titleシーン
   - **SettingsDialog** - 設定ダイアログ（音量調整機能付き）
 - **MenuButtonClickService** - DialogManagerと連携してダイアログを開く
 
-### 🔄 次のステップ（Phase 3 & 4）
-- **Titleシーンへの統合** - DialogContainerの配置とSceneDialogRegistryの設定
-- **プレハブの作成** - CreditsDialogとSettingsDialogのUIプレハブ作成
-- **実際のテスト** - Unityエディタ上での動作確認
+### ✅ Phase 3: 機能拡張（完了）
+- **ConfirmDialog** - 確認ダイアログ（親子関係のテスト用）
+  - カスタマイズ可能なメッセージとタイトル
+  - OnConfirmed/OnCancelledイベント
+  - SettingsDialogのリセット機能で親子関係を実装
+- **親子ダイアログの実装例**
+  - SettingsDialog → ConfirmDialogの親子関係
+  - リセットボタンで確認ダイアログを子として開く
+
+### 🔄 次のステップ（Phase 4: Unity エディタでの作業）
+- **Titleシーンへの統合**
+  - DialogContainerゲームオブジェクトを配置
+  - SceneDialogRegistryコンポーネントをアタッチ
+- **プレハブの作成**
+  - CreditsDialog UIプレハブ
+  - SettingsDialog UIプレハブ（Slider、Resetボタン付き）
+  - ConfirmDialog UIプレハブ（Confirm/Cancelボタン付き）
+- **SceneDialogRegistryの設定**
+  - 各ダイアログプレハブをInspectorで登録
+- **動作確認**
+  - メニューボタンからダイアログ表示
+  - 親子ダイアログの動作確認
+  - シーン遷移時のメモリリーク確認
 
 ## まとめ
 

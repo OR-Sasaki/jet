@@ -10,24 +10,45 @@ namespace Title.View
     /// </summary>
     public class SettingsDialog : Dialog
     {
-        [SerializeField] private TMP_Text _titleText;
         [SerializeField] private Slider _volumeSlider;
         [SerializeField] private TMP_Text _volumeText;
+        [SerializeField] private Button _resetButton;
 
         protected override void Awake()
         {
             base.Awake();
-
-            if (_titleText != null)
-            {
-                _titleText.text = "Settings";
-            }
 
             if (_volumeSlider != null)
             {
                 _volumeSlider.onValueChanged.AddListener(OnVolumeChanged);
                 _volumeSlider.value = AudioListener.volume;
                 UpdateVolumeText(_volumeSlider.value);
+            }
+
+            if (_resetButton != null)
+            {
+                _resetButton.onClick.AddListener(OnResetButtonClick);
+            }
+        }
+
+        private void OnResetButtonClick()
+        {
+            // 確認ダイアログを子として開く
+            var confirmDialog = _dialogManager.OpenDialog<ConfirmDialog>(parent: this);
+            if (confirmDialog != null)
+            {
+                confirmDialog.SetTitle("Reset Settings");
+                confirmDialog.SetMessage("Are you sure you want to reset all settings to default?");
+                confirmDialog.OnConfirmed += ResetSettings;
+            }
+        }
+
+        private void ResetSettings()
+        {
+            // デフォルト値にリセット
+            if (_volumeSlider != null)
+            {
+                _volumeSlider.value = 1.0f;
             }
         }
 
