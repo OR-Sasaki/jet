@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Root.Manager;
-using Root.Service;
 using UnityEngine;
 using VContainer;
+using ILogger = Root.Service.ILogger;
 
 namespace Root.View
 {
@@ -17,7 +17,7 @@ namespace Root.View
         private DialogManager _dialogManager;
         private IObjectResolver _resolver;
         private ILogger _logger;
-        private List<Type> _registeredDialogTypes = new List<Type>();
+        private readonly List<Type> _registeredDialogTypes = new();
 
         [Inject]
         public void Init(DialogManager dialogManager, IObjectResolver resolver, ILogger logger)
@@ -39,10 +39,8 @@ namespace Root.View
                     continue;
                 }
 
-                var dialogType = dialogPrefab.GetType();
-
                 // ファクトリー関数を登録
-                _dialogManager.RegisterDialogFactory(dialogType, () =>
+                _dialogManager.RegisterDialogFactory(() =>
                 {
                     var instance = Instantiate(dialogPrefab, transform);
                     _resolver.Inject(instance);
@@ -50,6 +48,7 @@ namespace Root.View
                 });
 
                 // 登録した型を記録
+                var dialogType = dialogPrefab.GetType();
                 _registeredDialogTypes.Add(dialogType);
             }
         }
